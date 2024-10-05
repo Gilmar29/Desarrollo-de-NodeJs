@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Registros</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Estilos personalizados para centrar los datos en las tablas */
+        th, td {
+            text-align: center; /* Centrar el texto en las celdas */
+            padding: 10px; /* Agregar espaciado interno */
+        }
+
+        h1 {
+            text-align: center; /* Centrar el título de las secciones */
+            margin-bottom: 30px; /* Agregar margen inferior */
+        }
+
+        /* Agregar margen entre las tablas */
+        .table-container {
+            margin-bottom: 40px; /* Espacio entre tablas */
+        }
+
+        /* Espaciado en los botones */
+        .action-buttons button {
+            margin: 5px; /* Margen entre botones */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <h1>Lista de Empresas Registradas</h1>
+        <div class="table-container">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID Empresa</th>
+                        <th>Nombre</th>
+                        <th>Dirección</th>
+                        <th>Representante Legal</th>
+                        <th>Teléfono</th>
+                        <th>Correo Electrónico</th>
+                        <th>Código Postal</th>
+                        <th>Estado</th>
+                        <th>Principal</th>
+                        <th>Fecha de Adición</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="empresas-table">
+                    <!-- Aquí se insertarán los datos de las empresas -->
+                </tbody>
+            </table>
+        </div>
+
+        <h1 class="mt-5">Lista de Sucursales Registradas</h1>
+        <div class="table-container">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID Sucursal</th>
+                        <th>ID Empresa</th>
+                        <th>Descripción</th>
+                        <th>Dirección</th>
+                        <th>Teléfono</th>
+                        <th>Encargado</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="sucursales-table">
+                    <!-- Aquí se insertarán los datos de las sucursales -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer class="text-center mt-5">
+        <p>&copy; 2024 Mi Empresa. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        function loadEmpresas() {
+            fetch('/empresas')
+                .then(response => response.json())
+                .then(data => {
+                    const empresasTable = document.getElementById('empresas-table');
+                    empresasTable.innerHTML = ''; // Limpiar tabla existente
+                    data.forEach(empresa => {
+                        const row = `
+                            <tr>
+                                <td>${empresa.idempresa}</td>
+                                <td>${empresa.nombre}</td>
+                                <td>${empresa.direccion}</td>
+                                <td>${empresa.representantelegal}</td>
+                                <td>${empresa.telefono}</td>
+                                <td>${empresa.correoelectronico}</td>
+                                <td>${empresa.codigopostal}</td>
+                                <td>${empresa.estado}</td>
+                                <td>${empresa.principal}</td>
+                                <td>${empresa.fechaadicion}</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-warning" onclick="editEmpresa('${empresa.idempresa}')">Editar</button>
+                                        <button class="btn btn-danger" onclick="deleteEmpresa('${empresa.idempresa}')">Eliminar</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                        empresasTable.insertAdjacentHTML('beforeend', row);
+                    });
+                });
+        }
+
+        function loadSucursales() {
+            fetch('/sucursales')
+                .then(response => response.json())
+                .then(data => {
+                    const sucursalesTable = document.getElementById('sucursales-table');
+                    sucursalesTable.innerHTML = ''; // Limpiar tabla existente
+                    data.forEach(sucursal => {
+                        const row = `
+                            <tr>
+                                <td>${sucursal.idsucursal}</td>
+                                <td>${sucursal.idempresa}</td>
+                                <td>${sucursal.descripcion}</td>
+                                <td>${sucursal.direccion}</td>
+                                <td>${sucursal.telefono}</td>
+                                <td>${sucursal.encargado}</td>
+                                <td>${sucursal.estado}</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="btn btn-warning" onclick="editSucursal('${sucursal.idsucursal}')">Editar</button>
+                                        <button class="btn btn-danger" onclick="deleteSucursal('${sucursal.idsucursal}')">Eliminar</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                        sucursalesTable.insertAdjacentHTML('beforeend', row);
+                    });
+                });
+        }
+
+        function editEmpresa(id) {
+            // Aquí puedes implementar la lógica para editar la empresa.
+            alert('Funcionalidad de edición de empresa para ID: ' + id);
+        }
+
+        function deleteEmpresa(id) {
+            if (confirm('¿Estás seguro de que deseas eliminar esta empresa?')) {
+                fetch(`/empresa/${id}`, { method: 'DELETE' })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Empresa eliminada exitosamente');
+                        loadEmpresas(); // Actualizar lista de empresas
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error al eliminar la empresa');
+                    });
+            }
+        }
+
+        function editSucursal(id) {
+            // Aquí puedes implementar la lógica para editar la sucursal.
+            alert('Funcionalidad de edición de sucursal para ID: ' + id);
+        }
+
+        function deleteSucursal(id) {
+            if (confirm('¿Estás seguro de que deseas eliminar esta sucursal?')) {
+                fetch(`/sucursal/${id}`, { method: 'DELETE' })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert('Sucursal eliminada exitosamente');
+                        loadSucursales(); // Actualizar lista de sucursales
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error al eliminar la sucursal');
+                    });
+            }
+        }
+
+        // Cargar los registros al inicio
+        loadEmpresas();
+        loadSucursales();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Empresa/Sucursal</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <h1>Eliminar Empresa</h1>
+        <form id="eliminar-empresa-form">
+            <div class="form-group">
+                <label for="idEmpresaEliminar">ID Empresa</label>
+                <input type="text" class="form-control" id="idEmpresaEliminar" required>
+            </div>
+            <button type="submit" class="btn btn-danger">Eliminar Empresa</button>
+        </form>
+
+        <h1 class="mt-5">Eliminar Sucursal</h1>
+        <form id="eliminar-sucursal-form">
+            <div class="form-group">
+                <label for="idSucursalEliminar">ID Sucursal</label>
+                <input type="text" class="form-control" id="idSucursalEliminar" required>
+            </div>
+            <button type="submit" class="btn btn-danger">Eliminar Sucursal</button>
+        </form>
+    </div>
+
+    <footer class="text-center mt-5">
+        <p>&copy; 2024 Mi Empresa. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        // Eliminar Empresa
+        $('#eliminar-empresa-form').on('submit', function(e) {
+            e.preventDefault();
+            const idEmpresa = $('#idEmpresaEliminar').val();
+
+            fetch(`/empresa/${idEmpresa}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Empresa eliminada exitosamente');
+                    $('#eliminar-empresa-form')[0].reset(); // Limpiar el formulario
+                } else {
+                    alert('Error al eliminar la empresa');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al eliminar la empresa');
+            });
+        });
+
+        // Eliminar Sucursal
+        $('#eliminar-sucursal-form').on('submit', function(e) {
+            e.preventDefault();
+            const idSucursal = $('#idSucursalEliminar').val();
+
+            fetch(`/sucursal/${idSucursal}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Sucursal eliminada exitosamente');
+                    $('#eliminar-sucursal-form')[0].reset(); // Limpiar el formulario
+                } else {
+                    alert('Error al eliminar la sucursal');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al eliminar la sucursal');
+            });
+        });
+    </script>
+
+</body>
+
+</html>

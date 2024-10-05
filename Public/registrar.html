@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Empresa/Sucursal</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+    <div class="container mt-5">
+        <h1>Registrar Empresa</h1>
+        <form id="empresa-form">
+            <div class="form-group">
+                <label for="idEmpresa">ID Empresa</label>
+                <input type="text" class="form-control" id="idEmpresa" required>
+            </div>
+            <div class="form-group">
+                <label for="nombre">Nombre</label>
+                <input type="text" class="form-control" id="nombre" required>
+            </div>
+            <div class="form-group">
+                <label for="direccion">Dirección</label>
+                <input type="text" class="form-control" id="direccion" required>
+            </div>
+            <div class="form-group">
+                <label for="representantelegal">Representante Legal</label>
+                <input type="text" class="form-control" id="representantelegal" required>
+            </div>
+            <div class="form-group">
+                <label for="telefono">Teléfono</label>
+                <input type="text" class="form-control" id="telefono" required>
+            </div>
+            <div class="form-group">
+                <label for="correoelectronico">Correo Electrónico</label>
+                <input type="email" class="form-control" id="correoelectronico" required>
+            </div>
+            <div class="form-group">
+                <label for="codigopostal">Código Postal</label>
+                <input type="text" class="form-control" id="codigopostal" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Registrar Empresa</button>
+        </form>
+
+        <h1 class="mt-5">Registrar Sucursal</h1>
+        <form id="sucursal-form">
+            <div class="form-group">
+                <label for="idSucursal">ID Sucursal</label>
+                <input type="text" class="form-control" id="idSucursal" required>
+            </div>
+            <div class="form-group">
+                <label for="idEmpresaSucursal">ID Empresa</label>
+                <input type="text" class="form-control" id="idEmpresaSucursal" required>
+            </div>
+            <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <input type="text" class="form-control" id="descripcion" required>
+            </div>
+            <div class="form-group">
+                <label for="direccionSucursal">Dirección</label>
+                <input type="text" class="form-control" id="direccionSucursal" required>
+            </div>
+            <div class="form-group">
+                <label for="telefonoSucursal">Teléfono</label>
+                <input type="text" class="form-control" id="telefonoSucursal" required>
+            </div>
+            <div class="form-group">
+                <label for="encargado">Encargado</label>
+                <input type="text" class="form-control" id="encargado" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Registrar Sucursal</button>
+        </form>
+    </div>
+
+    <footer class="text-center mt-5">
+        <p>&copy; 2024 Mi Empresa. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $('#empresa-form').on('submit', function(e) {
+            e.preventDefault();
+            const empresaData = {
+                idEmpresa: $('#idEmpresa').val(),
+                nombre: $('#nombre').val(),
+                direccion: $('#direccion').val(),
+                representantelegal: $('#representantelegal').val(),
+                telefono: $('#telefono').val(),
+                correoelectronico: $('#correoelectronico').val(),
+                codigopostal: $('#codigopostal').val(),
+                estado: 'A',
+                principal: 'S',
+                adiciono: 'admin'
+            };
+
+            fetch('/empresa', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(empresaData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Empresa registrada exitosamente');
+                $('#empresa-form')[0].reset(); // Limpiar el formulario
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al registrar la empresa');
+            });
+        });
+
+        $('#sucursal-form').on('submit', function(e) {
+            e.preventDefault();
+            const sucursalData = {
+                idSucursal: $('#idSucursal').val(),
+                idEmpresa: $('#idEmpresaSucursal').val(),
+                descripcion: $('#descripcion').val(),
+                direccion: $('#direccionSucursal').val(),
+                telefono: $('#telefonoSucursal').val(),
+                encargado: $('#encargado').val(),
+                estado: 'A'
+            };
+
+            fetch('/sucursal', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(sucursalData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Sucursal registrada exitosamente');
+                $('#sucursal-form')[0].reset(); // Limpiar el formulario
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al registrar la sucursal');
+            });
+        });
+    </script>
+
+</body>
+</html>
